@@ -113,6 +113,11 @@ Installation:
 (*) - NEU durch dieses Modul
 (**) - Ordner mit vielen Dateien, der nicht überschrieben werden muss, falls schon vorhanden
 
+° ihr müsst in der include/loader.php eine Zeile einfügen.
+  im Bereich # load all needed func
+  das hier einfügen.
+	require_once('include/includes/func/funkt.php');
+
 ° deineseite.de/install_news.php aufrufen und der Anleitung folgen und nach der Ausführung löschen
 
 ° Nach der Installation die install_news.php sofort Löschen!!
