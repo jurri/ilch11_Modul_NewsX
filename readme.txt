@@ -1,4 +1,4 @@
-News Extended 1.4b für IlchClan 1.1I+:
+News Extended 1.5.0 für IlchClan 1.1I+:
 """"""""""""""""""""""""""""""""
 
 Beschreibung:
@@ -21,6 +21,13 @@ Features:
 
 Changelog:
 ----------
+- 1.5.0
+	- CKEditor 4.4
+- eine Vorschau wird erstellt.
+- Bild sowie Text kann für eine Vorschau gewählt werden
+- bei keiner Auswahl generiert es Text und Bild selbst.
+- facebook-like-button eingefügt.
+
 - 1.4b
 	°Topnewstemplatevariablen angepasst, damit man die wie eine Normale News anpassen kann
 	°Option Newszeit für später erscheinende News auf Erscheinungszeit zu setzen
@@ -68,6 +75,12 @@ Entwickelt:
 ° nutzt den FCK Editor (getestet mit 2.6.3)
 ° Funktioniert auch mit BBCode 2.0 für 1.1I
 
+
+WeiterEntwickelt:
+-----------
+° von "FeTTsack" 
+	danke für die großartige vorarbeit :)
+
 Installation:
 -------------
 ° alle Dateien im Ordner upload, in ihrer Ordnerstrucktur hochladen
@@ -75,7 +88,7 @@ Installation:
 	| include/admin/news.php (*)
  	| include/admin/templates/news.htm (*)
 	| include/boxes/lastnews.php
-	| include/contents/newsextended.php
+	| include/contents/news.php (*)
 	| include/contents/news/news.php  
 	| include/contents/news/add.php 
 	| include/contents/news/archiv.php 
@@ -93,7 +106,9 @@ Installation:
 	| include/images/icons/news/comments.gif 
 	| include/images/icons/news/print.gif 
 	| include/images/icons/news/send.gif 
+	| include/images/news/ (**)
 	| include/includes/fckeditor (**)  
+	| include/includes/func/funkt.php 
 
 (*) - NEU durch dieses Modul
 (**) - Ordner mit vielen Dateien, der nicht überschrieben werden muss, falls schon vorhanden
