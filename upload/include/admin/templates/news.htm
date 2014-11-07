@@ -107,6 +107,27 @@ function new_kat(){
     document.getElementById('nadd_kat_td').innerHTML = '<input type="text" value="" name="nadd_kat" />';
     document.forms["news_opts"].nadd_kat.focus();
 }
+
+function preview_img(){
+	var loadimg = document.getElementById('img_view').value;
+	var html = '<img src="'+loadimg+'" width="150px" height="150px" />';
+	document.getElementById('p_img_news').innerHTML = html;
+
+}
+
+function zaehlen(){
+ 	max = 250;
+ 	anz = document.form.txt_view.value.length+1;
+ 	document.form.anzeige.value = max - anz;
+  	if(anz >= max){
+   		alert("Maximum erreicht !!!");
+   		document.getElementById("txt_view").style.color="#ff0000";
+  	}else{
+  		if(anz < max){
+   			document.getElementById("txt_view").style.color="#00c000";
+ 		}
+ 	}
+}
 //--></script>
 {xajax}
 
@@ -133,8 +154,28 @@ function new_kat(){
       <td class="Cnorm"><input size="50" type="text" name="titel" value="{UEBER}" tabindex="1"></td>
     </tr><tr>
       <td class="Cmite" align="right" valign="top" height="20"><strong>News : </strong></td>
+      
       <td width="600" class="Cnorm" rowspan="2" id="txttd">
-        <div style="display:block;" id="bbcode_buttons">
+
+		     
+      <div id="txtdiv">
+      <table><tr><td valign="top">
+	      <table height="100%"><tr><td>PreviewImage:<br/>
+	      <input type="text" value="{img_view}" id="img_view" name="img_view" tabindex="2" size="55" onchange="javascript:preview_img();" /><br/></td></tr>
+	      <tr><td valign="bottom">PreviewText:<br/></td></tr></table>
+	  </td>
+	  <td>
+	  	<div id="p_img_news"></div>
+	  </td></tr>
+	  <tr><td colspan="2">
+      	<textarea id="txt_view" name="txt_view" rows="5" cols="93" tabindex="3" onKeypress="zaehlen()" onKeydown="zaehlen()">{txt_view}</textarea></div><br/>
+      	max. Anzahl Zeichen : <input type="text" name="anzeige" size="3" value="250"><hr/>
+      </td></tr></table>
+
+
+
+
+        <div style="display:block;" id="bbcode_buttons">HauptNews:<br/>
       <!-- BB Code START -->
       {EXPLODE}
 	  <a href="javascript:void(0);" onclick="simple('b')"><img style="padding-left: 4%; float: left;" src="include/images/icons/button.bold.gif" alt="b" title="{_lang_bold}" border="0"></a>
@@ -145,8 +186,9 @@ function new_kat(){
       <a href="javascript:void(0);" onclick="simple('url')"><img style="padding-left: 4%; float: left;" src="include/images/icons/button.link.gif" alt="Url" title="{_lang_link}" border="0"></a>
       <a href="javascript:void(0);" onclick="simple('img')"><img style="padding-left: 4%; float: left;" src="include/images/icons/button.image.gif" alt="{_lang_picture}" title="{_lang_picture}" border="0"></a>
       <!-- BB Code ENDE -->
-      {EXPLODE}<script type="text/javascript" src="include/includes/js/BBCodeGlobal.js"></script>{__BBCodeButtons__}{EXPLODE}<br /><br /></div>
-      <div id="txtdiv"><textarea tabindex="2" id="txt" name="txt" rows="15" cols="93" tabindex="2">{txt}</textarea></span>
+      {EXPLODE}
+      <script type="text/javascript" src="include/includes/js/BBCodeGlobal.js"></script>{__BBCodeButtons__}{EXPLODE}<br/></div>
+      <div id="txtdiv"><textarea tabindex="4" id="txt" name="txt" rows="15" cols="93">{txt}</textarea></div>
       </td>
     </tr><tr>
       <td valign="top" class="Cmite"><div id="smilies" style="display:block;">{SMILIS}</div></td>

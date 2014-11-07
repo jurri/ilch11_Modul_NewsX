@@ -1,51 +1,95 @@
+{togglenewskat}
+<div id="box_1">
+
 <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" class="newsbg"><tr><td>
-<table width="100%" border="0" align="center" cellpadding="5" cellspacing="0">
-    <tr>
-      <td class="smalfont">{datum} - <strong><a href="index.php?news-{id}">{title}</a></strong></td>
-      </tr>
 
-
-    <tr>
-      <td><hr style="height: 0px; border: dotted #000000 0px; border-top-width: 1px; " /></td>
-      </tr>
+<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td class="smalfont" background="include/images/news/newsbg_head.png">&nbsp;</td>
+  </tr><tr>
+    <td class="smalfont" background="include/images/news/newsbg_content.png" align="center"><strong><a href="index.php?news-{id}">{title}</a></strong></td>
+  </tr><tr>
+    <td background="include/images/news/newsbg_content.png">
+        <a href="index.php?news-{id}">
+          <table width="100%"  border="0" cellspacing="0" cellpadding="2">
+            <tr>
+                <td width="20%" align="left"><center>{previewimg}</center></td><td width="80%" align="left" valign="top">{previewtext}</td>
+            </tr>
+          </table>
+        </a>
+          
+        </td>
+  </tr><tr>
+    <td background="include/images/news/newsbg_content.png">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="50%" align="left">
+        &nbsp;&nbsp;{like_button}
+      </td><td width="50%" align="right">
+        <div style="float:right;"><a href="index.php?user-details-{uid}" alt="Benutzerinfo: {username}" title="Benutzerinfo: {username}"><img src="include/images/icons/news/informant.gif" alt="Benutzerinfo: {username}" border="0"></a>
+			        	<a href="index.php?news-{id}" alt="Kommentare ({kom})" title="Kommentare ({kom})"><img src="include/images/icons/news/comments.gif" alt="Kommentare ({kom})" border="0"></a>
+			        	<a href="index.php?news-send-{id}" alt="Diese News einen Freund senden" title="Diese News einen Freund senden"><img src="include/images/icons/news/send.gif" alt="Diese News einen Freund senden" border="0"></a>
+			        	<a href="index.php?news-print-{id}" alt="Druckoptimierte Version" title="Druckoptimierte Version"><img src="include/images/icons/news/print.gif" alt="Druckoptimierte Version" border="0"></a>
+			        	{klicks}
+						&nbsp;&nbsp;&nbsp;</div>
+      </td></tr></table>
+    </td>
+    </tr><tr>
+    <td background="include/images/news/newsbg_bottom.png">&nbsp;</td>
+  </tr><tr>
+        <td>&nbsp;</td>
+    </tr>
 </table>
 
-
-
-  <table width="100%" border="0" align="center" cellpadding="1" cellspacing="0" class="cbg1">
-    <tr>
-      <td align="center">{kate}</td>
-    </tr>
-
-  </table>
-
-
-  <table width="100%"  border="0" cellspacing="0" cellpadding="2">
-    <tr>
-	  <td>{text}</td>
-	</tr>
-    <tr>
-	  <td><hr style="height: 0px; border: dotted #000000 0px; border-top-width: 1px; " /></td>
-	</tr>
- </table>
- <table width="100%"  border="0" cellspacing="0" cellpadding="1">
-    <tr>
-
-      <td align="left" width="60%" class="smalfont">Geschrieben von <strong>{username}</strong>{edit}</td>
-      <td align="right" width="40%">
-        <a href="index.php?user-details-{uid}" alt="Benutzerinfo: {username}" title="Benutzerinfo: {username}"><img src="include/images/icons/news/informant.gif" alt="Benutzerinfo: {username}" border="0">
-        <a href="index.php?news-{id}" alt="Kommentare ({kom})" title="Kommentare ({kom})"><img src="include/images/icons/news/comments.gif" alt="Kommentare ({kom})" border="0"></a>
-        <a href="index.php?news-send-{id}" alt="Diese News einen Freund senden" title="Diese News einen Freund senden"><img src="include/images/icons/news/send.gif" alt="Diese News einen Freund senden" border="0"></a>
-        <a href="index.php?news-print-{id}" alt="Druckoptimierte Version" title="Druckoptimierte Version"><img src="include/images/icons/news/print.gif" alt="Druckoptimierte Version" border="0"></a>
-        {klicks}
-        {readwholenews}
-      </td>
-    </tr>
-  </table>
 </td></tr></table>
+</div>
 
-<br />
-<br />
+<div id="box_2" style="display:none;">
+<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" class="newsbg"><tr><td>
+<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+    <tr>
+      	<td class="smalfont" background="include/images/news/newsbg_head.png">&nbsp;</td>
+    </tr><tr>
+      	<td class="smalfont" background="include/images/news/newsbg_content.png">&nbsp;&nbsp;{datum} - <strong><a href="index.php?news-{id}">{title}</a></strong></td>
+    </tr><tr>
+      	<td background="include/images/news/newsbg_content.png">
+      		<table width="100%" border="0" align="center" cellpadding="1" cellspacing="0" class="cbg1">
+		    	<tr>
+		      		<td align="center">{kate}</td>
+		    	</tr>
+		  	</table>
+
+		    <table width="100%"  border="0" cellspacing="0" cellpadding="2">
+			    <tr>
+				  	<td>&nbsp;</td><td>{text}<br/>{readwholenews}</td>
+				</tr><tr>
+	  				<td colspan="2"><hr style="height: 0px; border: dotted #000000 0px; border-top-width: 1px; " /></td>
+				</tr>
+ 			</table>
+
+			<table width="100%"  border="0" cellspacing="0" cellpadding="1">
+			    <tr>
+			      	<td align="left" width="60%" class="smalfont">&nbsp;Geschrieben von <strong>{username}</strong><br/>&nbsp;{edit}</td>
+			      	<td align="right" width="40%">
+			        	<a href="index.php?user-details-{uid}" alt="Benutzerinfo: {username}" title="Benutzerinfo: {username}"><img src="include/images/icons/news/informant.gif" alt="Benutzerinfo: {username}" border="0"></a>
+			        	<a href="index.php?news-{id}" alt="Kommentare ({kom})" title="Kommentare ({kom})"><img src="include/images/icons/news/comments.gif" alt="Kommentare ({kom})" border="0"></a>
+			        	<a href="index.php?news-send-{id}" alt="Diese News einen Freund senden" title="Diese News einen Freund senden"><img src="include/images/icons/news/send.gif" alt="Diese News einen Freund senden" border="0"></a>
+			        	<a href="index.php?news-print-{id}" alt="Druckoptimierte Version" title="Druckoptimierte Version"><img src="include/images/icons/news/print.gif" alt="Druckoptimierte Version" border="0"></a>
+			        	{klicks}
+			      	</td>
+			      	<td>&nbsp;</td>
+			    </tr>
+			</table>
+		</td>
+	</tr><tr>
+		<td background="include/images/news/newsbg_content.png">&nbsp;{like_button}</td>
+    </tr><tr>
+		<td background="include/images/news/newsbg_bottom.png">&nbsp;</td>
+	</tr><tr>
+      	<td>&nbsp;</td>
+    </tr>
+</table>
+</td></tr></table>
+</div>
+
 {EXPLODE}
 <br />
 <br /><center>{SITELINK}</center>
@@ -75,7 +119,8 @@ if (Check == true) window.open("index.php?news-"+NID+"-d"+ID,"_self");
     <td >
       <div style="float:left; padding-left:10px; ">{TEXT}</div><br style="clear:both; " />
       <p></p>
-      <a href="javascript:history.back(1)"><b>&laquo;</b>{_lang_back}</a> </td>
+      <a href="javascript:history.back(1)"><b>&laquo;</b>{_lang_back}</a><br/><hr/>
+	  {like_button}</td>
   </tr>
 
   <tr>

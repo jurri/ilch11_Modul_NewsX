@@ -1,14 +1,28 @@
 <?php
 // Copyright by: Manuel Staechele
 // Support: www.ilch.de
-// Modded by Mairu für News Extended
+// Modded by FeTTsack für News Extended
+
 defined ('main') or die ('no direct access');
 
 $title = $allgAr['title'] . ' :: News';
 $hmenu = 'News';
 $design = new design ($title , $hmenu);
 $design->addheader('<link rel="alternate" type="application/atom+xml" title="News (Atom)" href="index.php?news-atom" />
-<link rel="alternate" type="application/rss+xml" title="News (RSS)" href="index.php?news-rss" />');
+<link rel="alternate" type="application/rss+xml" title="News (RSS)" href="index.php?news-rss" />
+<script type="text/javascript">
+function toggleBoxes (toShow) {
+    var boxes = 7;
+    var chosenBox = 1;
+    toShow = isNaN(toShow) ? 0 : toShow;
+    if (toShow < 1 || toShow > boxes) {
+        toShow = (chosenBox < boxes) ? chosenBox + 1 : 1;
+    }
+    document.getElementById(\'box_\'+chosenBox).style.display = \'none\';
+    document.getElementById(\'box_\'+toShow).style.display = \'\';
+    chosenBox = toShow;
+}
+</script>');
 
 function news_find_kat ($kat) {
     $katpfad = 'include/images/news/';
@@ -28,6 +42,29 @@ function news_find_kat ($kat) {
         $kategorie = '<img style="" src="' . $pfadzumBild . '" alt="' . $kat . '">';
     } else {
         $kategorie = '<b>' . $kat . '</b><br /><br />';
+    }
+
+    return ($kategorie);
+}
+
+function news_find_kat_preview ($kat) {
+    $katpfad = 'include/images/news/preview/';
+    $katjpg = $katpfad . $kat . '.jpg';
+    $katgif = $katpfad . $kat . '.gif';
+    $katpng = $katpfad . $kat . '.png';
+
+    if (file_exists($katjpg)) {
+        $pfadzumBild = $katjpg;
+    } elseif (file_exists ($katgif)) {
+        $pfadzumBild = $katgif;
+    } elseif (file_exists ($katpng)) {
+        $pfadzumBild = $katpng;
+    }
+
+    if (!empty($pfadzumBild)) {
+        $kategorie = '<img style="" src="' . $pfadzumBild . '" alt="' . $kat . '" width="150px" height="150px" />';
+    } else {
+        $kategorie = '<div style="margin-top:55px;"><b>' . $kat . '</b></div><div style="background-image:url(include/images/news/preview/default150.png); margin-left:10px; margin-top:-80px; width:150px; height:150px; background-repeat:no-repeat;"></div>';
     }
 
     return ($kategorie);
@@ -83,6 +120,8 @@ if (!is_numeric($menu->get(1))) {
         "a.news_kat as kate,
       a.news_text as text,
       b.name as username,
+      a.news_preview,
+      a.img_preview,
       a.html
     FROM prefix_news as a
     LEFT JOIN prefix_user as b ON a.user_id = b.id
@@ -107,7 +146,9 @@ if (!is_numeric($menu->get(1))) {
                     'TXT' => $row['html'] ? $a[0] : bbcode($a[0]),
                     'LINK' => 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/index.php?news-' . $row['id'],
                     'AUTHOR' => $row['username'],
-                    'DATE' => $row['datum']
+                    'DATE' => $row['datum'],
+                    'previewtext' => bbcode($row['news_preview']),
+                    'previewimg' => '<img src="'.$row['img_preview'].'" width="150px" height="150px"/>'
                     ), 1);
         }
         $tpl->out(2);
@@ -115,6 +156,7 @@ if (!is_numeric($menu->get(1))) {
     } else {
         $design->header();
         $limit = $allgAr['Nlimit'];
+        //$limit = 10;
         $page = ($menu->getA(1) == 'p' ? $menu->getE(1) : 1);
 
         //Gruppenrechte
@@ -129,6 +171,8 @@ if (!is_numeric($menu->get(1))) {
                 b.name as username,
                 c.name as editorname,
                 a.html,
+                a.news_preview,
+                a.img_preview,
                 a.edit_time,
                 a.klicks,
                 b.id as uid
@@ -159,17 +203,16 @@ if (!is_numeric($menu->get(1))) {
                     $tn_r['kom'] = db_count_query("SELECT COUNT(id) FROM prefix_koms WHERE uid = $tn_id AND cat = 'NEWS'");
                 }
         	    $tn_r['showkom'] = $tn_koms;
-                if (strpos ($tn_r['news_text'], '[PREVIEWENDE]') !== false) {
-                    $a = explode('[PREVIEWENDE]' , $tn_r['news_text']);
-                    $tn_r['news_text']= $a[0];
-                    $tn_r['readwholenews'] = '<a href="index.php?news-' . $tn_id . '" alt="mehr lesen" title="mehr lesen"><img src="include/images/icons/news/more.gif" alt="mehr lesen" border="0"></a>';
-                } else {
-                     $tn_r['readwholenews'] = '';
-                }
+                if(strlen($tn_r['text']) > 1248){
+					$tn_r['text'] = substr($tn_r['text'], 0, 1248)."... ";
+					$tn_r['readwholenews'] = '<a href="index.php?news-' . $tn_r['id'] . '" alt="mehr lesen" title="mehr lesen"><img src="include/images/icons/news/more.gif" alt="mehr lesen" align="absmiddle" border="0">weiterlesen...</a>';
+				}else{
+					$tn_r['readwholenews'] = '';
+				}
                 $tn_r['id'] = $tn_id;
         	    $tn_r['klicks'] = '<img src="include/images/icons/news/counter.gif" alt="' . $tn_r['klicks']. ' mal gelesen" title="' . $tn_r['klicks']. ' mal gelesen" border="0">';
                 $tn_r['datum']  = $lang[$tn_r['dayofweek']] . ' ' . $tn_r['datum'];
-        	    $tn_r['edit']   = is_null($tn_r['edit_time']) ? '' : '<br /><i>zuletzt ge&auml;ndert am ' . date('d.m.Y - H:i', strtotime($tn_r['edit_time'])) . '&nbsp;Uhr';
+        	    $tn_r['edit']   = is_null($tn_r['edit_time']) ? '' : '<i>zuletzt ge&auml;ndert am ' . date('d.m.Y - H:i', strtotime($tn_r['edit_time'])) . '&nbsp;Uhr';
         	    if (!empty($tn_r['edit']) and $tn_r['editorname'] != $tn_r['username']) {
         	        $tn_r['edit'].= ' von ' . $tn_r['editorname']. '</i>';
         	    } elseif (!empty($tn_r['edit'])) {
@@ -178,6 +221,9 @@ if (!is_numeric($menu->get(1))) {
 
                 $tn_r['kate'] = news_find_kat($tn_r['news_kat']);
         	    $tn_r['text'] = $tn_r['html']? $tn_r['news_text']: bbcode($tn_r['news_text']);
+                $tn_r['previewtext'] = bbcode($tn_r['news_preview']);
+                $tn_r['previewimg'] = '<img src="'.$tn_r['img_preview'].'" width="150px" height="150px"/>';
+				$tn_r['like_button'] = get_like_button('news-'.$tn_r['id']);
                 $tn_tpl->set_ar_out($tn_r, 0);
 				unset($tn_tpl);
         	}
@@ -221,6 +267,8 @@ if (!is_numeric($menu->get(1))) {
       b.name as username,
       c.name as editorname,
       a.html,
+      a.news_preview,
+      a.img_preview,
       a.edit_time,
       a.klicks,
       b.id as uid
@@ -234,19 +282,52 @@ if (!is_numeric($menu->get(1))) {
     ORDER BY a.news_time DESC
     LIMIT " . $anfang . "," . $limit;
 
+
+        $count = 0;
         // echo '<pre>'.$abf.'</pre>';
         $erg = db_query($abf);
-    	if (db_num_rows($erg) == 0 and !empty($news_kat)) {
+        $number_rows = db_num_rows($erg);
+    	if ($number_rows == 0 and !empty($news_kat)) {
     		echo 'Keine News in dieser Kategorie gefunden.<br />
     			<a href="index.php?news">News&uuml;bersichtsseite aufrufen</a>';
     		$design->footer(1);
     	}
         while ($row = db_fetch_assoc($erg)) {
+
+            if($count == 0 and $_SESSION['authright'] <= -5){
+                $row['togglenewskat'] = '<a href="javascript:void(0);" onclick="toggleBoxes(1);">Auflisten</a> | <a href="javascript:void(0);" onclick="toggleBoxes(2);">Einblick</a>';
+                $row['divbox1_start'] = '<div id="box_1">';
+                $row['divbox2_start'] = '<div id="box_2" style="display:none;">';
+            }else{
+                $row['togglenewskat'] = '';
+                $row['divbox1_start'] = '';
+                $row['divbox2_start'] = '';
+            }
+            $count++;
+
+            if($count >= $number_rows){
+                $row['divbox1_end'] = '</div>';
+                $row['divbox2_end'] = '</div>';
+            }else{
+                $row['divbox1_end'] = '';
+                $row['divbox2_end'] = '';
+            }
+
             $k0m = db_query("SELECT COUNT(ID) FROM `prefix_koms` WHERE uid = " . $row['id'] . " AND cat = 'NEWS'");
             $row['kom'] = db_result($k0m, 0);
-
+            $kategorie_p = news_find_kat_preview($row['kate']);
             $row['kate'] = news_find_kat($row['kate']);
+            $text = bbcode($row['text']);
             $row['datum'] = $lang[$row['dayofweek']] . ' ' . $row['datum'];
+			
+			if(strlen($row['text']) > 1248){
+				$row['text'] = substr($row['text'], 0, 1248)."... ";
+				$row['readwholenews'] = '<a href="index.php?news-' . $row['id'] . '" alt="mehr lesen" title="mehr lesen"><img src="include/images/icons/news/more.gif" alt="mehr lesen" align="absmiddle" border="0">weiterlesen...</a>';
+			}else{
+				$row['readwholenews'] = '';
+			}
+			
+			/*
             if (strpos ($row['text'] , '[PREVIEWENDE]') !== false) {
                 $a = explode('[PREVIEWENDE]' , $row['text']);
                 $row['text'] = $a[0];
@@ -254,16 +335,31 @@ if (!is_numeric($menu->get(1))) {
             } else {
                 $row['readwholenews'] = '';
             }
+			*/
             $row['klicks'] = '<img src="include/images/icons/news/counter.gif" alt="' . $row['klicks'] . ' mal gelesen" title="' . $row['klicks'] . ' mal gelesen" border="0">';
             if (!$row['html']) {
                 $row['text'] = bbcode($row['text']);
             }
-            $row['edit'] = is_null($row['edit_time']) ? '' : '<br /><i>zuletzt ge&auml;ndert am ' . date('d.m.Y - H:i', strtotime($row['edit_time'])) . '&nbsp;Uhr';
+            $row['edit'] = is_null($row['edit_time']) ? '' : 'zuletzt ge&auml;ndert am ' . date('d.m.Y - H:i', strtotime($row['edit_time'])) . '&nbsp;Uhr';
             if (!empty($row['edit']) and $row['editorname'] != $row['username']) {
                 $row['edit'] .= ' von ' . $row['editorname'] . '</i>';
             } elseif (!empty($row['edit'])) {
                 $row['edit'] .= '</i>';
             }
+			$row['like_button'] = get_like_button('news-'.$row['id']);
+
+            $row['previewtext'] = bbcode($row['news_preview']);
+            if($row['previewtext'] == ''){
+                $row['previewtext'] = htmlspecialchars_decode(bbcode(substr(strip_tags($text), 0, 250)))."... ";
+            }
+
+
+            $row['previewimg'] = '<img src="'.$row['img_preview'].'" width="150px" height="150px"/>';
+            if($row['img_preview'] == ''){
+                $row['previewimg'] = $kategorie_p;
+            }
+            
+
             $tpl->set_ar_out($row, 0);
         }
         $tpl->set_out('SITELINK', $MPL, 1);
@@ -349,8 +445,9 @@ if (!is_numeric($menu->get(1))) {
         'uname' => $_SESSION['authname'],
         'ANTISPAM' => (loggedin()?'':get_antispam ('newskom', 0)),
         'NAME' => $row->news_title,
-        'info' => $kom_info
-        );
+        'info' => $kom_info,
+		'like_button' => get_like_button('news-'.$row->id)
+        );	
     $tpl->set_ar_out($ar, 2);
 
     if ($komsOK) {

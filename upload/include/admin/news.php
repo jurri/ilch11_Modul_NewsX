@@ -183,16 +183,20 @@ if (!empty($_REQUEST['um'])) {
     if ($um == 'insert') {
         // insert
         $text = escape($_POST['txt'], 'textarea');
+        $preview = escape($_POST['txt_view'], 'textarea');
+        $pimg = escape($_POST['img_view'], 'text');
         if ($_POST['katLis'] == 'neu') {
             $_POST['katLis'] = $_POST['kat'];
         }
 
-        db_query("INSERT INTO `prefix_news` (news_title,user_id,news_time,news_recht,news_groups,news_kat,news_text,html,`show`,archiv,endtime)
-		VALUES ('" . $_POST['titel'] . "'," . $_SESSION['authid'] . ",FROM_UNIXTIME(".$newscreatetime.")," . $grecht . "," . $groups . ",'" . $_POST['katLis'] . "','" . $text . "','" . $_POST['html'] . "',$show,$archiv,$endtime)");
+        db_query("INSERT INTO `prefix_news` (news_title,user_id,news_time,news_recht,news_groups,news_kat,news_text,html,`show`,archiv,endtime,news_preview,img_preview)
+		VALUES ('" . $_POST['titel'] . "'," . $_SESSION['authid'] . ",FROM_UNIXTIME(".$newscreatetime.")," . $grecht . "," . $groups . ",'" . $_POST['katLis'] . "','" . $text . "','" . $_POST['html'] . "',$show,$archiv,$endtime,'$preview','$pimg')");
         // insert
     } elseif ($um == 'change') {
         // edit
         $text = escape($_POST['txt'], 'textarea');
+        $preview = escape($_POST['txt_view'], 'textarea');
+        $pimg = escape($_POST['img_view'], 'text');
 
         if ($_POST['katLis'] == 'neu') {
             $_POST['katLis'] = $_POST['kat'];
@@ -208,6 +212,8 @@ if (!empty($_REQUEST['um'])) {
 				`show`     = ' . $show . ',
 				archiv     = ' . $archiv . ',
 				endtime     = ' . $endtime . ',
+                news_preview = "'.$preview.'",
+                img_preview = "'.$pimg.'",
                 news_text  = "' . $text . '"' . $newschangesqladd . ' WHERE news_id = "' . $_POST['newsID'] . '" LIMIT 1');
         $edit = $_POST['newsID'];
     }
@@ -248,6 +254,8 @@ if (empty ($doNoIn)) {
         $Fueber = '';
         $Fstext = '';
         $Ftxt = '';
+        $Ftxt_view = '';
+        $Fimg_view = '';
         $Fgrecht = 1023;
         $Fgroups = 0;
         $FkatLis = '';
@@ -272,6 +280,8 @@ if (empty ($doNoIn)) {
         $Fgrecht = $row->news_recht;
         $Fgroups = $row->news_groups;
         $FkatLis = $row->news_kat;
+        $Ftxt_view = $row->news_preview;
+        $Fimg_view = $row->img_preview;
         $Fsub = '&Auml;ndern';
         $Fhtml = $row->html == 1 ? 'switch_html();' : '';
         if ($row->show == 0) {
@@ -313,6 +323,8 @@ if (empty ($doNoIn)) {
         'MPL' => $MPL,
         'UEBER' => $Fueber,
         'txt' => $Ftxt,
+        'txt_view' => $Ftxt_view,
+        'img_view' => $Fimg_view,
         'SMILIS' => getsmilies(),
         // 'grecht' => dbliste($Fgrecht,$tpl,'grecht',"SELECT id,name FROM prefix_grundrechte ORDER BY id DESC"),
         'KATS' => getKats($FkatLis),

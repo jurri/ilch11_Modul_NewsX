@@ -220,6 +220,13 @@ Dieses Script soll die n&ouml;tigen Datanbank&auml;ndernungen f&uuml;r das <stro
     if (!in_array('klicks',$old)) {
         $update_news[] = 'ADD `klicks`  MEDIUMINT ( 9 )  NOT NULL DEFAULT \'0\'';
     }
+	if (!in_array('news_preview',$old)) {
+        $update_news[] = 'ADD `news_preview`  text  NULL';
+    }
+	if (!in_array('img_preview',$old)) {
+        $update_news[] = 'ADD `img_preview`  varchar(400)  NULL';
+    }
+	
 
 	//Version 1.3
 	if (!in_array('news_groups', $old)) {
@@ -235,6 +242,11 @@ Dieses Script soll die n&ouml;tigen Datanbank&auml;ndernungen f&uuml;r das <stro
 		$sql_statements[] = 'UPDATE `prefix_news` SET `news_recht` = 768 WHERE `news_recht` = -8';
 		$sql_statements[] = 'UPDATE `prefix_news` SET `news_recht` = 512 WHERE `news_recht` = -9';
 	}
+	
+	$sql_statements[] = "INSERT INTO `prefix_config` (`schl`, `typ`, `kat`, `frage`, `wert`, `pos`) VALUES ('fb_active', 'r2', 'Like Button Optionen', 'Modul aktivieren?', '1', 0);";
+	$sql_statements[] = "INSERT INTO `prefix_config` (`schl`, `typ`, `kat`, `frage`, `wert`, `pos`) VALUES ('fb_send', 'r2', 'Like Button Optionen', 'Senden Button anzeigen?', '1', 0);";
+	$sql_statements[] = "INSERT INTO `prefix_config` (`schl`, `typ`, `kat`, `frage`, `wert`, `pos`) VALUES ('fb_width', 'input', 'Like Button Optionen', 'Breite des Modules (in Pixeln)', '450', 0);";
+	$sql_statements[] = "INSERT INTO `prefix_config` (`schl`, `typ`, `kat`, `frage`, `wert`, `pos`) VALUES ('fb_faces', 'r2', 'Like Button Optionen', 'Profilbilder anzeigen?', '1', 0);";
 
     if (!empty($update_news)) {
         $sql_statements[] = 'ALTER TABLE `prefix_news` '.implode(', ', $update_news).';';
